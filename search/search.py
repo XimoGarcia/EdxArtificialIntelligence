@@ -121,7 +121,7 @@ def templateSearch(problem, priorityFunction):
     fringe.push((problem.getStartState(), list(), 0))
     while True:
         if fringe.isEmpty(): 
-            exit()
+            exit("Empty fringe!")
         state, history, cost = fringe.pop()
         if problem.isGoalState(state):
             return history
