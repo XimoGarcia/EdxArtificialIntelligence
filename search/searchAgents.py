@@ -360,10 +360,10 @@ def cornersHeuristic(state, problem):
     if problem.isGoalState(state):
         return 0
         
-    heuristic = 999999
+    heuristic = 0
     pos, remaining_corners = state
     for corner in remaining_corners:
-        heuristic = min(abs(corner[0] - pos[0]) + abs(corner[1] - pos[1]), heuristic)
+        heuristic = max(abs(corner[0] - pos[0]) + abs(corner[1] - pos[1]), heuristic)
     
     return heuristic
 
