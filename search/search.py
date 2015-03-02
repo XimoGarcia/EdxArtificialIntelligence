@@ -75,42 +75,29 @@ def tinyMazeSearch(problem):
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    closed = list()
-    fringe = util.Queue()
-    fringe.push((problem.getStartState(), list()))
-    while True:
-        if fringe.isEmpty(): 
-            exit()
-        state, history = fringe.pop()
-        if problem.isGoalState(state):
-            return history
-        if state not in closed:
-            closed.append(state)
-            for nextState, movement, _ in problem.getSuccessors(state):
-                fringe.push((nextState, history + [movement]))
-        
+    def priorityFunction(item):
+        _, movements, _ = item
+        return -len(movements)
+    
+    return templateSearch(problem, priorityFunction)
     
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    def priorityFunction(item):
+        _, movements, _ = item
+        return len(movements)
+    
+    return templateSearch(problem, priorityFunction)
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    def priorityFunction(item):
+        _, _, cost = item
+        return cost
+    
+    return templateSearch(problem, priorityFunction)
 
 def nullHeuristic(state, problem=None):
     """
@@ -124,6 +111,21 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+
+def templateSearch(problem, priorityFunction):
+    closed = list()
+    fringe = util.PriorityQueueWithFunction(priorityFunction)
+    fringe.push((problem.getStartState(), list(), 0))
+    while True:
+        if fringe.isEmpty(): 
+            exit()
+        state, history, cost = fringe.pop()
+        if problem.isGoalState(state):
+            return history
+        if state not in closed:
+            closed.append(state)
+            for nextState, movement, newCost in problem.getSuccessors(state):
+                fringe.push((nextState, history + [movement], cost + newCost))
 
 # Abbreviations
 bfs = breadthFirstSearch
