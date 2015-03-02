@@ -108,8 +108,11 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    def priorityFunction(item):
+        state, _, cost = item
+        return cost + heuristic(state, problem)
+    
+    return templateSearch(problem, priorityFunction)
 
 
 def templateSearch(problem, priorityFunction):
